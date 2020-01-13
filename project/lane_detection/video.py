@@ -61,7 +61,7 @@ def region_of_interest(img, vertices, color3=(255,255,255), color1=255): # ROI �
     return roi_image
  
 try:
-    cap = cv2.VideoCapture('./solidWhiteRight.mp4')
+    cap = cv2.VideoCapture('./challenge.mp4')
     
     while True:
         ret , frame = cap.read()
@@ -89,15 +89,22 @@ try:
  
         lines = hough_lines(roi_img, 1, np.pi/180, 30, 100, 180) # 허프 변환
         
+        #roi_img2 = region_of_interest(frame, vertice_set)
         draw_lines(frame, lines)        
         cv2.imshow('webcam', frame)
+
+       
+
  
     
     cap.release()
+    cv2.waitKey(0)
     cv2.destroyAllWindows()
-    cv2.waitKey(1)
     
 except:
     print('cannot load video')
+    cv2.waitKey(0)
     cv2.destroyAllWindows()
-    cv2.waitKey(1)
+    
+    
+    

@@ -61,7 +61,7 @@ def region_of_interest(img, vertices, color3=(255,255,255), color1=255): # ROI �
     return roi_image
  
 try:
-    cap = cv2.VideoCapture('.\\solidWhiteRight.mp4')
+    cap = cv2.VideoCapture(0)
     
     while True:
         ret , frame = cap.read()
@@ -70,8 +70,7 @@ try:
             print('cannot load camera')
             break
             
-        k = cv2.waitKey(10)
-        if k == 27:
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             break
  
         gray_img = grayscale(frame) # 흑백 이미지로 변환

@@ -61,11 +61,7 @@ def region_of_interest(img, vertices, color3=(255,255,255), color1=255): # ROI �
     return roi_image
  
 try:
-<<<<<<< HEAD
-    cap = cv2.VideoCapture('./solidWhiteRight2.mp4.mp4')
-=======
-    cap = cv2.VideoCapture('./challenge.mp4')
->>>>>>> b92e0e7d846aedec8c607890f0ef4880f2342eed
+    cap = cv2.VideoCapture('.\\solidWhiteRight.mp4')
     
     while True:
         ret , frame = cap.read()
@@ -86,29 +82,26 @@ try:
         
         mask_add = cv2.bitwise_or(mask_white, mask_yellow) 
         mask_img = cv2.bitwise_and(gray_img, mask_add)
+ 
         blur_img = gaussian_blur(mask_img, 3) # Blur 효과
+ 
         canny_img = canny(blur_img, 50, 150) # Canny edge 알고리즘
+ 
         vertice_set = vertices(canny_img) # 관심영역 설정
+        
         roi_img = region_of_interest(canny_img, vertice_set) # ROI 설정
  
         lines = hough_lines(roi_img, 1, np.pi/180, 30, 100, 180) # 허프 변환
         
-        #roi_img2 = region_of_interest(frame, vertice_set)
         draw_lines(frame, lines)        
         cv2.imshow('webcam', frame)
-
-       
-
  
     
     cap.release()
-    cv2.waitKey(0)
     cv2.destroyAllWindows()
+    cv2.waitKey(1)
     
 except:
     print('cannot load video')
-    cv2.waitKey(0)
     cv2.destroyAllWindows()
-    
-    
-    
+    cv2.waitKey(1)

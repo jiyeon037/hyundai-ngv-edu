@@ -6,8 +6,8 @@ import cv2
 import numpy as np
 
 # load the two input images
-imageA = cv2.imread("sam5.jpg")
-imageB = cv2.imread("sam6.jpg")
+imageA = cv2.imread("OUTPUT1.jpg")
+imageB = cv2.imread("OUTPUT2.jpg")
 
 grayA = cv2.cvtColor(imageA, cv2.COLOR_BGR2GRAY)
 grayB = cv2.cvtColor(imageB, cv2.COLOR_BGR2GRAY)

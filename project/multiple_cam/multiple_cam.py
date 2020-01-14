@@ -3,16 +3,16 @@
 import numpy as np
 import cv2
 
-video_capture_0 = cv2.VideoCapture(0) #노트북 내장 웹캠
+#video_capture_0 = cv2.VideoCapture(0) #노트북 내장 웹캠
 video_capture_1 = cv2.VideoCapture(1) # 외장형 USB 웹캠1
 video_capture_2 = cv2.VideoCapture(2) # 외장형 USB 웹캠2
 
 while True:
-    ret0, frame0 = video_capture_0.read()
+    #ret0, frame0 = video_capture_0.read()
     ret1, frame1 = video_capture_1.read()
     ret2, frame2 = video_capture_2.read()
-    if(ret0):
-        cv2.imshow("CAM0", frame0)
+    #if(ret0):
+        #cv2.imshow("CAM0", frame0)
 
     if(ret1):
         cv2.imshow("CAM1", frame1)

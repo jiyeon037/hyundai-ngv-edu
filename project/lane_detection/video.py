@@ -61,7 +61,7 @@ def region_of_interest(img, vertices, color3=(255,255,255), color1=255): # ROI ì
     return roi_image
  
 try:
-    cap = cv2.VideoCapture('./solidWhiteRight.mp4')
+    cap = cv2.VideoCapture('./solidWhiteRight2.mp4.mp4')
     
     while True:
         ret , frame = cap.read()

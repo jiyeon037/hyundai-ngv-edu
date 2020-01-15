@@ -42,6 +42,9 @@ def imlistshow(imglist):
     i=0
     while i < len(imglist):
         cv2.imshow(str(i+1), imglist[i])
+
+        filename = 'filtering'+str(i+1)+'.jpg'
+        cv2.imwrite(directoryname + '/image_save/' + filename, imglist[i])
         i+=1
 
 
@@ -55,7 +58,7 @@ readfile_list = grayscale(file_list, 0.5)
 
 print('그레이스케일 변환 완료')
 
-filterfile_list = Filter_list(readfile_list, 150)
+filterfile_list = Filter_list(readfile_list, 120)
 #vertical = cv2.imread(directoryname+'/1.jpg', cv2.IMREAD_GRAYSCALE)
 #horizon = cv2.imread(directoryname+'/2.jpg', cv2.IMREAD_GRAYSCALE)
 print('img read complete')

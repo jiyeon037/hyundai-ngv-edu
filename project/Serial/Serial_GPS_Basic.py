@@ -2,7 +2,7 @@
 # 파이썬에서 연결가능한 시리얼포트를 검색하고 알아서 연결함.
 # 
 # https://www.gpsinformation.org/dale/nmea.htm
-
+# GPS 프로토콜 : DMM ( 도 및 십진수 분 )
 import serial
 from serial.tools import list_ports
 

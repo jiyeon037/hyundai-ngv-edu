@@ -43,6 +43,7 @@ def set_servo_pulse(channel, pulse):
     pulse *= 1000
     pulse //= pulse_length
     pwm.set_pwm(channel, 0, pulse)
+    pwm.set_pwm_freq(60)
 
 
 # Function to handle pygame events

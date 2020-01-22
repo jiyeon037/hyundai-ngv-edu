@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
+# add servo pwm generator
+# joy stick dependency
+# 아직 테스트 이전 소스
 import time
 import pygame
 import RPi.GPIO as GPIO
 
-def MotorOff():
-    print("MOTOR OFF")
+# pca9685 pwm dependency
+import Adafruit_PCA9685
+pwm = Adafruit_PCA9685.PCA9685() #pwm = Adafruit_PCA9685.PCA9685(address=0x41, busnum=2)
 
-# Settings for Joystick
+# Settings for joystick
 axisUpDown = 1                          # Joystick axis to read for up / down position
 axisUpDownInverted = False              # Set this to True if up and down appear to be swapped
 axisLeftRight = 3                       # Joystick axis to read for left / right position
@@ -28,6 +32,18 @@ pygame.init()
 pygame.joystick.init()
 joystick = pygame.joystick.Joystick(0)
 joystick.init()
+pwm.set_pwm_freq(60) # 서보모터(SG90)에 최적화된 69Hz로 펄스주기를 설정.
+
+def set_servo_pulse(channel, pulse):
+    pulse_length = 1000000    # 1,000,000 us per second
+    pulse_length //= 60       # 60 Hz
+    print('{0}us per period'.format(pulse_length))
+    pulse_length //= 4096     # 12 bits of resolution
+    print('{0}us per bit'.format(pulse_length))
+    pulse *= 1000
+    pulse //= pulse_length
+    pwm.set_pwm(channel, 0, pulse)
+
 
 # Function to handle pygame events
 def PygameHandler(events):
@@ -73,14 +89,16 @@ try:
             hadEvent = False
             if moveLeft:
                 print("LEFT")
+                pwm.set_pwm(1, 0, 170) #1번서보를 펄스길이(170)으로 설정.
             elif moveRight:
                 print("RIGHT")
+                pwm.set_pwm(1, 0, 400) #1번서보를 펄스길이(400)으로 설정.
             elif moveUp:
                 print("GO")
             elif moveDown:
                 print("BACK")
             else:
                 print("STOP")
-            
+
 except KeyboardInterrupt:
     print("EMERGENCY STOP")

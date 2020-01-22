@@ -19,4 +19,6 @@ while True:
         temp_list = list()
         temp_list = temp_data.split(',')
         print(temp_list[2]) # V : GPS unstable/ A : stable
+        print(temp_list[3]) # V : GPS unstable/ A : stable
+        print(temp_list[5]) # V : GPS unstable/ A : stable
         

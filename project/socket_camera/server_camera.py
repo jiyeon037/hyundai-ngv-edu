@@ -11,6 +11,9 @@ from _thread import *
 enclosure_queue = Queue()
 enclosure_queue2 = Queue()
 
+def grayscale(img): # 그레이스케일로 이미지 변환
+    return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+
 # 쓰레드 함수 
 def threaded(client_socket, addr, queue1,queue2): 
 
@@ -50,9 +53,10 @@ def webcam(queue1,queue2):
     while True:
         ret1, frame1 = capture1.read()
         ret2, frame2 = capture2.read()
-        
+      
         if ret1 == True:       
             encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),90]
+            frame1 = grayscale(frame1)
             result, imgencode = cv2.imencode('.jpg', frame1, encode_param)
             data1 = numpy.array(imgencode)
             stringData1 = data1.tostring()
@@ -61,6 +65,7 @@ def webcam(queue1,queue2):
 
         if ret2 == True:       
             encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),90]
+            frame2 = grayscale(frame2)
             result, imgencode = cv2.imencode('.jpg', frame2, encode_param)
             data2 = numpy.array(imgencode)
             stringData2 = data2.tostring()

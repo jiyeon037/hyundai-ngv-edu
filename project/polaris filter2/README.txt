@@ -1,1 +1,0 @@
-image seed 폴더에 변환을 원하는 이미지 파일을 넣고 polaris.py 파일을 실행합니다.

@@ -4,7 +4,7 @@ import numpy as np
 import cv2
 
 #video_capture_0 = cv2.VideoCapture(0) #노트북 내장 웹캠
-video_capture_1 = cv2.VideoCapture(1) # 외장형 USB 웹캠1
+video_capture_1 = cv2.VideoCapture(0) # 외장형 USB 웹캠1
 video_capture_2 = cv2.VideoCapture(2) # 외장형 USB 웹캠2
 
 while True:

@@ -33,9 +33,11 @@ def threaded(client_socket, addr, queue1,queue2):
 
             ch_data = int(data)
             if ch_data == 1:
+                global A
                 stringData = A
                 #stringData = queue1.get()
             if ch_data == 2:
+                global B
                 stringData = B
                 #stringData = queue2.get()
 

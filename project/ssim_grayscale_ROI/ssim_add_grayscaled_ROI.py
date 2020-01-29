@@ -34,6 +34,7 @@ while True:
         
         grayA = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
         grayB = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
+        print(grayA.shape)
 
         cv2.imshow("CAM1", grayA)
         cv2.imshow("CAM2", grayB)

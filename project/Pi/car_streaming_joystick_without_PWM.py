@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # 원격 동키카 제어 및 카메라 스트리밍 코드
-# 원본 영상 스트리밍 ( 컬러 )
+# 원본 영상 스트리밍 ( 흑백 )
 import cv2
 import numpy
 import time

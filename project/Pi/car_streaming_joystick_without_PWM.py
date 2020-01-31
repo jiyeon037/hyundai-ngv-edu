@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # 원격 동키카 제어 및 카메라 스트리밍 코드
-
+# 원본 영상 스트리밍 ( 컬러 )
 import cv2
 import numpy
 import time
@@ -13,7 +13,7 @@ from _thread import *
 # Settings for joystick
 axisUpDown = 1                          # Joystick axis to read for up / down position
 axisUpDownInverted = False              # Set this to True if up and down appear to be swapped
-axisLeftRight = 4                       # Joystick axis to read for left / right position
+axisLeftRight = 3                       # Joystick axis to read for left / right position
 axisLeftRightInverted = False           # Set this to True if left and right appear to be swapped
 
 pygame.init()

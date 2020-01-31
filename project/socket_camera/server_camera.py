@@ -85,3 +85,4 @@ while True:
     start_new_thread(threaded, (client_socket, addr, enclosure_queue, enclosure_queue2)) 
 
 server_socket.close() 
+  

@@ -12,7 +12,7 @@ from _thread import *
 global A,B
 
 # 쓰레드 함수 
-def threaded(client_socket, addr, queue1,queue2): 
+def threaded(client_socket, addr): 
     print('Connected by :', addr[0], ':', addr[1]) 
     while True: 
         try:
@@ -39,9 +39,9 @@ def threaded(client_socket, addr, queue1,queue2):
     client_socket.close() 
 
 
-def webcam(queue1,queue2):   
-    capture1 = cv2.VideoCapture(1) # 카메라 채널 바꿔주면 됨
-    capture2 = cv2.VideoCapture(2) # 카메라 채널 바꿔주면 됨
+def webcam():   
+    capture1 = cv2.VideoCapture(0) # 카메라 채널 바꿔주면 됨
+    capture2 = cv2.VideoCapture(1) # 카메라 채널 바꿔주면 됨
     while True:
         ret1, frame1 = capture1.read()
         ret2, frame2 = capture2.read()
@@ -68,7 +68,7 @@ def webcam(queue1,queue2):
             break
 
 
-HOST = '192.168.255.22'
+HOST = ''
 PORT = 9999
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
@@ -76,13 +76,12 @@ server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server_socket.bind((HOST, PORT)) 
 server_socket.listen() 
 print('server start')
-start_new_thread(webcam, (enclosure_queue,enclosure_queue2))
+start_new_thread(webcam, ())
 
 
 while True: 
     print('wait')
     client_socket, addr = server_socket.accept() 
-    start_new_thread(threaded, (client_socket, addr, enclosure_queue, enclosure_queue2)) 
+    start_new_thread(threaded, (client_socket, addr, )) 
 
 server_socket.close() 
-  

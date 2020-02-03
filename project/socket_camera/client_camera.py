@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # 소켓 통신으로 다중 웹캠 정보를 받아오는 파이썬 코드
 # 서버코드가 먼저 실행뒤에 클라이언트 코드를 실행할 것
+# GPS 추가 
 import socket 
 import numpy as np
 import cv2
@@ -37,6 +38,9 @@ while True:
 
     decimg2 = get_img_channel('2') # 2번 이미지 전송 요청
     cv2.imshow('CH2 CAM',decimg2)
+
+    GPS_DATA = get_img_channel('3')
+    print(GPS_DATA)
     
     key = cv2.waitKey(1)
     if key == 27:

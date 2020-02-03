@@ -54,6 +54,7 @@ global A,B
 global GO
 global TILT
 global CONT_DATA
+global GPSDATA
 GO = 0
 TILT = 0 
 
@@ -115,42 +116,36 @@ def threaded(client_socket, addr):
             if ch_data == 1:
                 global A
                 stringData = A
-                #stringData = queue1.get()
+                client_socket.send(str(len(stringData)).ljust(16).encode())
+                client_socket.send(stringData)
             if ch_data == 2:
                 global B
                 stringData = B
-                #stringData = queue2.get()
+                client_socket.send(str(len(stringData)).ljust(16).encode())
+                client_socket.send(stringData)
                 
-            if ch_data == 3: # GPS 위도 경도 데이터 요청
-                temp_data = str(ser.readline())
-                if(temp_data.find('GPRMC') != -1):
-                    #print(temp_data)
-                    temp_list = list()
-                    temp_list = temp_data.split(',')
-                    print(temp_list[2]) # V : GPS unstable/ A : stable
-                    print(temp_list[3])
-                    print(temp_list[5]) 
-                    stringData = temp_list[3] + temp_list[5]
+            if ch_data == 3: # GPS 위도 경도 데이터 요청                
+                stringData = GPSDATA
+                client_socket.send(str(len(stringData)).ljust(16).encode())
+                client_socket.send(stringData)
                     
-            client_socket.send(str(len(stringData)).ljust(16).encode())
-            client_socket.send(stringData)
             ## 이 부분에 PWM 제어 신호 넣으면 됨
             CONT_DATA = PygameHandler(pygame.event.get())
             print(GO, TILT)
             if GO == 1:
-                print("FORWARD")
+                #print("FORWARD")
                 pwm.set_pwm(0, 0, PWM_GO) #0번서보
             elif GO == -1:
-                print("BACKWARD")
+                #print("BACKWARD")
                 pwm.set_pwm(0, 0, PWM_BACK) #0번서보
             else:                      # 이 부분에 전진모터 중립
                 pwm.set_pwm(0, 0, PWM_STOP) #0번서보
 
             if TILT == 1:
-                print("LEFT")
+                #print("LEFT")
                 pwm.set_pwm(3, 0, PWM_LEFT) #3번서보
             elif TILT == -1:
-                print("RIGHT")
+                #print("RIGHT")
                 pwm.set_pwm(3, 0, PWM_RIGHT) #3번서보
             else:                      # 이 부분에 조향서보모터 중립
                 pwm.set_pwm(3, 0, PWM_CENTER) #3번서보   
@@ -192,7 +187,19 @@ def webcam():
         key = cv2.waitKey(1)
         if key == 27:
             break
-        
+def gps():
+        temp_data = str(ser.readline())
+        if(temp_data.find('GPRMC') != -1):
+        #print(temp_data)
+            temp_list = list()
+            temp_list = temp_data.split(',')
+            print(temp_list[2]) # V : GPS unstable/ A : stable
+            #print(temp_list[3])
+            #print(temp_list[5])
+            global GPSDATA
+            GPSDATA = temp_list[2]
+            
+            
 #시리얼 통신 초기화
 port_lists = list_ports.comports()
 for i in range(len(port_lists)):
@@ -201,7 +208,7 @@ sel_num = 0
 ser = serial.Serial(port_lists[sel_num][0],9600,timeout=2)
 
 start_new_thread(webcam, ())
-        
+start_new_thread(gps, ())        
 while True:
     print('wait')
     client_socket, addr = server_socket.accept() 

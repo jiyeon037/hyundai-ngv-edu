@@ -54,7 +54,7 @@ global A,B
 global GO
 global TILT
 global CONT_DATA
-global GPSDATA
+GPSDATA = 'B'
 GO = 0
 TILT = 0 
 
@@ -113,23 +113,25 @@ def threaded(client_socket, addr):
                 print('Disconnected by ' + addr[0],':',addr[1])
                 break
             ch_data = int(data)
-            if ch_data == 1:
-                global A
+            if ch_data == 1:  
                 stringData = A
                 client_socket.send(str(len(stringData)).ljust(16).encode())
                 client_socket.send(stringData)
             if ch_data == 2:
-                global B
                 stringData = B
                 client_socket.send(str(len(stringData)).ljust(16).encode())
                 client_socket.send(stringData)
                 
             if ch_data == 3: # GPS 위도 경도 데이터 요청                
-                stringData = GPSDATA
+                stringData = str(gps())
+                while stringData == ERR:
+                    stringData = str(gps())
                 client_socket.send(str(len(stringData)).ljust(16).encode())
-                client_socket.send(stringData)
+                client_socket.send(stringData.encode())
                     
             ## 이 부분에 PWM 제어 신호 넣으면 됨
+            
+            
             CONT_DATA = PygameHandler(pygame.event.get())
             print(GO, TILT)
             if GO == 1:
@@ -188,16 +190,16 @@ def webcam():
         if key == 27:
             break
 def gps():
-        temp_data = str(ser.readline())
-        if(temp_data.find('GPRMC') != -1):
+    temp_data = str(ser.readline())
+    if(temp_data.find('GPRMC') != -1):
         #print(temp_data)
-            temp_list = list()
-            temp_list = temp_data.split(',')
-            print(temp_list[2]) # V : GPS unstable/ A : stable
+        temp_list = list()
+        temp_list = temp_data.split(',')
+        print(temp_list[2]) # V : GPS unstable/ A : stable
             #print(temp_list[3])
             #print(temp_list[5])
-            global GPSDATA
-            GPSDATA = temp_list[2]
+        return temp_list[2]
+    return 'ERR'
             
             
 #시리얼 통신 초기화
@@ -205,13 +207,14 @@ port_lists = list_ports.comports()
 for i in range(len(port_lists)):
     print(port_lists[i][0])
 sel_num = 0
-ser = serial.Serial(port_lists[sel_num][0],9600,timeout=2)
+ser = serial.Serial(port_lists[sel_num][0],9600,timeout=1)
 
 start_new_thread(webcam, ())
-start_new_thread(gps, ())        
 while True:
     print('wait')
     client_socket, addr = server_socket.accept() 
     start_new_thread(threaded, (client_socket, addr )) 
+  #  start_new_thread(gps, ())        
 
 server_socket.close()
+

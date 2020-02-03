@@ -30,7 +30,7 @@ def get_gpsdata():
     client_socket.send(message.encode()) ## 1번 이미지 전송 요청
     length = recvall(client_socket,16)
     stringData = recvall(client_socket, int(length))
-    print('GPS:', stringData.decode('uint8'))
+    print(stringData)
 
 HOST = '192.168.0.7'
 PORT = 9999
@@ -45,7 +45,7 @@ while True:
     decimg2 = get_img_channel('2') # 2번 이미지 전송 요청
     cv2.imshow('CH2 CAM',decimg2)
 
-    get_gpsdata()
+    #/get_gpsdata()
    
     
     key = cv2.waitKey(1)

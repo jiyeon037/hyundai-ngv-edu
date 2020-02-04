@@ -1,4 +1,4 @@
-#키보드 1또는 2를 입력받아 이미지를 다르게 띄우는 프로그
+#키보드 1 또는 2를 입력받아 이미지를 다르게 띄우는 프로그램
 from tkinter import *
 
 from PIL import Image, ImageTk

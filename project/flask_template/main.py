@@ -3,10 +3,6 @@ from camera import VideoCamera
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
 def gen(camera):
     while True:
         frame = camera.get_frame()
@@ -20,3 +16,11 @@ def video_feed():
 
 #if __name__ == '__main__':
 #    app.run(host='0.0.0.0', debug=True)
+
+@app.route('/', methods=["GET"])
+def index():
+    return render_template('index.html', my_list=[0,1,2,])
+
+
+if __name__ == '__main__':
+    app.run()

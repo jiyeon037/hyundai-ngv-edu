@@ -1,26 +1,43 @@
 from flask import Flask, render_template, Response
-from camera import VideoCamera
+import cv2
 
 app = Flask(__name__)
 
-def gen(camera):
-    while True:
-        frame = camera.get_frame()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+'''
+def find_camera(id):
+    cameras = ['0'] #### id 넣어보자
+    return cameras[int(id)]
+'''
 
-@app.route('/video_feed')
-def video_feed():
-    return Response(gen(VideoCamera()),
+def gen_frames(camera_id):
+    
+   # cams = find_camera(camera_id)
+    cap = cv2.VideoCapture(0)
+    
+    while True:
+        # for cap in caps:
+        # # Capture frame-by-frame
+        success, frame = cap.read()  # read the camera frame
+        if not success:
+            break
+        else:
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
+
+
+@app.route('/video_feed/<string:id>/', methods=["GET"])
+def video_feed(id):
+    """Video streaming route. Put this in the src attribute of an img tag."""
+    return Response(gen_frames(id),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-#if __name__ == '__main__':
-#    app.run(host='0.0.0.0', debug=True)
 
 @app.route('/', methods=["GET"])
 def index():
-    return render_template('index.html', my_list=[0,1,2,])
+    return render_template('index.html', my_list=[0,])
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

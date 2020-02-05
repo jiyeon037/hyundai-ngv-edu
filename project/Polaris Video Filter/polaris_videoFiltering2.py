@@ -8,6 +8,21 @@ import math
 3. 픽셀 값의 평균으로 필터링: 평균값보다 크면 255(white), 작으면 0(black)
 4. ROI 구역 설정 후 ROI 부분만 출력
 '''
+
+def im_trim1(img): #함수로 만든다
+    x = 100; y = 100; #자르고 싶은 지점의 x좌표와 y좌표 지정
+    w = 200; h = 200; #x로부터 width, y로부터 height를 지정
+    img_trim1 = img[y:y+h, x:x+w] #trim한 결과를 img_trim에 담는다
+    #cv2.imwrite('org_trim.jpg',img_trim) #org_trim.jpg 라는 이름으로 저장
+    return img_trim1 #필요에 따라 결과물을 리턴
+
+def im_trim2(img): #함수로 만든다
+    x = 70; y = 185; #자르고 싶은 지점의 x좌표와 y좌표 지정
+    w = 200; h = 200; #x로부터 width, y로부터 height를 지정
+    img_trim2 = img[y:y+h, x:x+w] #trim한 결과를 img_trim에 담는다
+    #cv2.imwrite('org_trim.jpg',img_trim) #org_trim.jpg 라는 이름으로 저장
+    return img_trim2 #필요에 따라 결과물을 리턴
+    
 def resize(img, ratio, dsize=None, dst=None):
     return cv2.resize(img, dsize, dst, ratio, ratio, interpolation=cv2.INTER_AREA)
 

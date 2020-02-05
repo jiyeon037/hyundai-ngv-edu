@@ -32,7 +32,7 @@ def get_gpsdata():
     stringData = recvall(client_socket, int(length))
     print(stringData)
 
-HOST = '192.168.0.7'
+HOST = '192.168.0.5'
 PORT = 9999
 client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 
 client_socket.connect((HOST, PORT)) 

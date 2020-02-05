@@ -27,8 +27,8 @@ def threaded(client_socket, addr):
                 stringData = A
                 
             if ch_data == 2:
-                global B
-                stringData = B
+
+                stringData = A
 
             client_socket.send(str(len(stringData)).ljust(16).encode())
             client_socket.send(stringData)

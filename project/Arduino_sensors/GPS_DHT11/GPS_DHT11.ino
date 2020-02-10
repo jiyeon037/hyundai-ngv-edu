@@ -60,6 +60,7 @@ void loop() {
     // 이 부분에 적외선 온도 센서 끝
     
     // 라즈베리파이에 정보 송신
+    Serial.print("A ,");
     Serial.print(lattitude); Serial.print(",");
     Serial.print(longitude); Serial.print(",");
     Serial.print(hum);       Serial.print(",");

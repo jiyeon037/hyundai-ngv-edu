@@ -29,7 +29,7 @@ void loop() {
     GPS_DATA += data;
     GPS_LAST = millis();
   }
-  if(!GPS.available() && millis() - GPS_LAST > 500)
+  if(!GPS.available() && millis() - GPS_LAST > 100)
   {
     //Serial.print(GPS_DATA);
     int data_start = GPS_DATA.indexOf("GPRMC");

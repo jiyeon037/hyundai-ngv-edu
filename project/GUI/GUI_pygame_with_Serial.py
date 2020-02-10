@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # pip3 install pyserial
 # 파이썬에서 연결가능한 시리얼포트를 검색하고 알아서 연결함.
 # 
@@ -9,6 +11,10 @@ from serial.tools import list_ports
 # GUI 표현해주는 내용
 import pygame
 import time
+
+# 서버쪽에 데이터 전
+import requests
+
 pygame.init()
 window = pygame.display.set_mode((1000, 656))
 window.fill((255, 255, 255))
@@ -44,8 +50,11 @@ while True:
     time.sleep(1)
     pygame.display.update()
     '''
-    temp_data = str(ser.readline())
-    print(temp_data)
+    data_list = list()
+    temp_data = str(ser.readline())    
+    data_list = temp_data.split(',')
+    if len(data_list) == 5:
+        print('LAT:{} LONG:{} H:{} T:{}'.format(data_list[0],data_list[1],data_list[2],data_list[3]))
 
 pygame.quit()
 quit()

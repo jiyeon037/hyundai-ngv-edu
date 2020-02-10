@@ -63,6 +63,7 @@ void loop() {
     Serial.print(lattitude); Serial.print(",");
     Serial.print(longitude); Serial.print(",");
     Serial.print(hum);       Serial.print(",");
-    Serial.print(temp);      Serial.println();
+    Serial.print(temp);      Serial.print(",");
+    Serial.println();
   }
 }

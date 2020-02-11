@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# -*- coding: utf-8 -*-
+
 # pip3 install pyserial
 # 파이썬에서 연결가능한 시리얼포트를 검색하고 알아서 연결함.
 # 
@@ -81,7 +83,7 @@ while True:
     data_list = temp_data.split(',')
     if len(data_list) == 7:
         print('LAT:{} LONG:{} H:{} T:{} ALARM : {}'.format(data_list[1],data_list[2],data_list[3],data_list[4], data_list[5]))
-        DMM2DD(float(data_list[1]), float(data_list[2]))
+        #DMM2DD(float(data_list[1]), float(data_list[2]))
         H = data_list[3]
         T = data_list[4]
         ALARM = data_list[5]
@@ -96,8 +98,6 @@ while True:
             print("SEND TO SERVER")
             message = 'B'
             ser.write(message.encode())
-            #params = {'req_lat': LAT, 'req_lng': LONG, 'req_t1' : '10', 'req_t2' : T, 'req_h' : H}
-            #response = requests.get(, params=params)
            
         
     else:

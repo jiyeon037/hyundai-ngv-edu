@@ -22,7 +22,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(21, GPIO.IN)
 
 pygame.init()
-window = pygame.display.set_mode((1000, 656))
+window = pygame.display.set_mode((800, 450))
 window.fill((255, 255, 255))
 pygame.display.update()
 

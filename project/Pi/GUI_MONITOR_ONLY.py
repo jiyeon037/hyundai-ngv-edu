@@ -24,6 +24,9 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(21, GPIO.IN)
 
 pygame.init()
+pygame.mixer.init()
+pygame.mixer.music.load('wetroad.mp3')
+
 window = pygame.display.set_mode((800, 450))
 window.fill((255, 255, 255))
 pygame.display.update()
@@ -64,13 +67,11 @@ while True:
     temp_data = temp_data.split("b");
     print(temp_data)
     if temp_data[1] == "'B\\r\\n'":
-        drow_image()
-        pygame.display.update()
+        ALARM = True
     
     elif GPIO.input(GPIO_SIGNAL)==0 :
         if send_flag == False:
-            drow_image()
-            pygame.display.update()
+            ALARM = True
             send_flag = True
             print("SEND TO SERVER")
             message = 'B'
@@ -80,6 +81,13 @@ while True:
         drow_ice_image()
         send_flag = False
         pygame.display.update()
+
+    if ALARM == True:
+        if pygame.mixer.music.get_busy() == False:
+            pygame.mixer.music.play()
+        drow_image()
+        pygame.display.update()
+        ALARM = False
 
 
         

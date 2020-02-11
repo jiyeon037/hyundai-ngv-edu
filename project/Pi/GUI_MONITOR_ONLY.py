@@ -45,29 +45,8 @@ def drow_image():
     window.blit(pygame.image.load("1.png"), (0, 0))
     pygame.display.update()
 
-def DMM2DD(latitude, longitude):
-        int_latitude = int(latitude)
-        int_longitude = int(longitude)
 
-        #DD = d + (min/60) + (sec/3600)
-        d_latitude = int((int_latitude) / 100)
-        d_longitude = int((int_longitude) / 100)
-
-        m_latitude= (latitude -int_latitude) + int_latitude%100
-        m_longitude = (longitude -int_longitude) +int_longitude%100
-
-        CAL_latitude = d_latitude+ m_latitude/60
-        CAL_longitude = d_longitude + m_longitude/60
-
-        CAL_latitude= round(CAL_latitude,4)
-        CAL_longitude= round(CAL_longitude,4)
-
-        global LONG, LAT
-        LAT = str(CAL_latitude)
-        LONG = str(CAL_longitude)
         
-
-
 port_lists = list_ports.comports()
 for i in range(len(port_lists)):
     print(port_lists[i][0])
@@ -80,16 +59,9 @@ drow_image()
 while True:
     data_list = list()
     temp_data = str(ser.readline())    
-    data_list = temp_data.split(',')
-    if len(data_list) == 7:
-        print('LAT:{} LONG:{} H:{} T:{} ALARM : {}'.format(data_list[1],data_list[2],data_list[3],data_list[4], data_list[5]))
-        #DMM2DD(float(data_list[1]), float(data_list[2]))
-        H = data_list[3]
-        T = data_list[4]
-        ALARM = data_list[5]
-
-        
-    if GPIO.input(GPIO_SIGNAL)==0 or ALARM == 'T':
+    print(temp_data)
+    temp_data = str(temp_data)
+    if GPIO.input(GPIO_SIGNAL)==0 or temp_data == 'T':
         drow_image()
         pygame.display.update()
 

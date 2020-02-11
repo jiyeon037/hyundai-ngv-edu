@@ -90,12 +90,12 @@ while True:
     if GPIO.input(GPIO_SIGNAL)==0 or ALARM == 'T':
         drow_image()
         pygame.display.update()
+        message = 'B'
+        ser.write(message.encode())
 
         if send_flag == False:
             send_flag = True
             print("SEND TO SERVER")
-            message = 'B'
-            ser.write(message.encode())
             #params = {'req_lat': LAT, 'req_lng': LONG, 'req_t1' : '10', 'req_t2' : T, 'req_h' : H}
             #response = requests.get(, params=params)
            

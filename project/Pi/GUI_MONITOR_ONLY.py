@@ -61,7 +61,7 @@ while True:
     temp_data = str(ser.readline())    
     print(temp_data)
     temp_data = str(temp_data)
-    if GPIO.input(GPIO_SIGNAL)==0 or temp_data == 'T':
+    if GPIO.input(GPIO_SIGNAL)==0 or temp_data == 'B':
         drow_image()
         pygame.display.update()
 

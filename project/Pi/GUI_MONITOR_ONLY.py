@@ -24,7 +24,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(21, GPIO.IN)
 
 pygame.init()
-window = pygame.display.set_mode((1000, 656))
+window = pygame.display.set_mode((800, 450))
 window.fill((255, 255, 255))
 pygame.display.update()
 
@@ -58,21 +58,25 @@ drow_image()
 
 while True:
     data_list = list()
-    temp_data = str(ser.readline())    
+    temp_data = list()
+    
+    temp_data = str(ser.readline())
+    temp_data = temp_data.split("b");
     print(temp_data)
-    temp_data = str(temp_data)
-    if GPIO.input(GPIO_SIGNAL)==0 or temp_data == 'B\r\n':
+    if temp_data[1] == "'B\\r\\n'":
         drow_image()
         pygame.display.update()
-
+    
+    elif GPIO.input(GPIO_SIGNAL)==0 :
         if send_flag == False:
+            drow_image()
+            pygame.display.update()
             send_flag = True
             print("SEND TO SERVER")
             message = 'B'
             ser.write(message.encode())
-           
-        
-    else:
+    
+    elif GPIO.input(GPIO_SIGNAL)==1 :
         drow_ice_image()
         send_flag = False
         pygame.display.update()

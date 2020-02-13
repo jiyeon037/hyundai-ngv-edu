@@ -28,17 +28,8 @@ def im_trim(img, x, y, w, h):
 def grayscale(img): # 그레이스케일로 이미지 변환
     return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 
-def pixel_value_average(img): # 픽셀 값의 평균 계산
-    sum = 0
-    for i in range(0, img.shape[0]):
-        for j in range(0, img.shape[1]):
-            sum += img[i,j]
-    pixel_N = img.shape[0] * img.shape[1]
-    average = sum/pixel_N
-    return average
-
 def Filter(img, value = 0): # 픽셀 값 평균을 기준으로 필터링
-    average = pixel_value_average(img)
+    average = img.mean()
 
     if value == 0:
         ret,img_filter = cv2.threshold(img, average, 255, cv2.THRESH_BINARY)
@@ -184,7 +175,7 @@ cv2.setTrackbarPos('Y', 'Binary', 200) #초기값 200
 #sys.stdout = open('output.txt','w') #print 값 output.txt파일로 저장
 
 count = 0
-unit = 15
+unit = 15 #pixel이 300*300 이므로 unit은 300의 약수여야함
 while True:
     ret1, f1 = cap1.read()
     ret2, f2 = cap2.read()
@@ -201,13 +192,13 @@ while True:
         frame1 = grayscale(frame1_rgb)
         frame2 = grayscale(frame2_rgb)
 
-        average1 = pixel_value_average(frame1)
-        average2 = pixel_value_average(frame2)
+        average1 = frame1.mean()
+        average2 = frame2.mean()
         gap = average1 - average2
 
         frame2_c = same_bright(frame2, gap)
         
-        average2_c = pixel_value_average(frame2_c)
+        average2_c = frame2_c.mean()
 
         thresh1 = Filter(frame1, TH)
         thresh2 = Filter(frame2_c, TH)
@@ -216,18 +207,28 @@ while True:
         xor_ratio = count_pixel(thresh3) * 100/ thresh3.size
         #xor_ratio_arr = seperated_image_xor(thresh3, 10)
 
-        r_arr = seperated_image_ratio(thresh1, thresh2, unit)  #pixel이 300*300 이므로 unit은 300의 약수여야함
+        r_arr = seperated_image_ratio(thresh1, thresh2, unit)  
         p_ratio = int(np.mean(r_arr))
 
         wet = wetpoint_list(r_arr)
         boxing_wet(frame1_rgb, wet, unit)
+        
+        
+        for k in wet:
+            if (k[0]+1,k[1]) in wet and (k[0],k[1]+1) in wet and (k[0]+1,k[1]+1) in wet:
+                count += 1
+            else: count = 0
 
-        if len(wet) > 20:
+
+        '''
+        if len(wet) > 5:
             count += 1
         else:
             count = 0
+        '''
 
-        if count > 6:
+
+        if count > 50:
             print('',\
             'W.P '+str(len(wet)),\
             'R: '+ str(p_ratio),\

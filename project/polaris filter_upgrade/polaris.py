@@ -113,7 +113,7 @@ file_list = os.listdir(directoryname + '/image seed')
 
 # 그레이스케일로 이미지 리드한 리스트 생성
 
-readfile_list = grayscale(file_list, 0.1)
+readfile_list = grayscale(file_list, 1)
 print('그레이스케일 변환 완료')
 
 fltrlst = Filter_list(readfile_list)

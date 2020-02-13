@@ -27,7 +27,7 @@ def Filter(img, value = 0): # 픽셀 값 평균을 기준으로 필터링
     average = pixel_value_average(img)
 
     if value == 0:
-        ret,img_filter = cv2.threshold(img, average *0.7, 255, cv2.THRESH_BINARY)
+        ret,img_filter = cv2.threshold(img, average*1.1, 255, cv2.THRESH_BINARY)
     else:
         ret,img_filter = cv2.threshold(img, value, 255, cv2.THRESH_BINARY)
        
@@ -50,7 +50,7 @@ def pixel_ratio(img1, img2): # 픽셀 값 0 비율 계산
         else:
             ratio = temp2/temp1
             return ratio
-    return 99
+
 def vertices_multicam(img, distance, width, direction, angle = 54): 
     '''
     관심 영역 설정 - 거리에 따른 roi 설정
@@ -121,22 +121,20 @@ def show_convert_video(frame, CAM, direction): # frame과 window창 이름 설�
     cv2.imshow( CAM , frame)
     return frame
 
-video_capture_1 = cv2.VideoCapture(1) # 외장형 USB 웹캠1
-video_capture_2 = cv2.VideoCapture(2) # 외장형 USB 웹캠2
+video_capture_0 = cv2.VideoCapture(0) # 외장형 USB 웹캠1
+video_capture_1 = cv2.VideoCapture(1) # 외장형 USB 웹캠2
 
-ret1, frame1 = video_capture_1.read()
-ret2, frame2 = video_capture_2.read()
 
 while True:
     ret1, frame1 = video_capture_1.read()
-    ret2, frame2 = video_capture_2.read()
+    ret0, frame0 = video_capture_0.read()
 
     #ret2, frame2 = video_capture_2.read()
 
-    if (ret1 and ret2):
+    if (ret0 and ret1):
 
-        img1= show_convert_video(frame1, "CAM0", 0)
-        img2= show_convert_video(frame2, "CAM1", 1)
+        img1= show_convert_video(frame0, "CAM0", 0)
+        img2= show_convert_video(frame1, "CAM1", 1)
         #print(pixel_ratio(frame0, frame1))
         A = pixel_ratio(img1, img2) # 대입인자는 이미 0 또는 1만 있는 이미지만 대입
         print(A)       
@@ -148,6 +146,6 @@ while True:
         break
     # 사용자가 키보드 q 누르면 Opencv 종료
 
+video_capture_0.release()
 video_capture_1.release()
-video_capture_2.release()
 cv2.destroyAllWindows() # 리소스 반환

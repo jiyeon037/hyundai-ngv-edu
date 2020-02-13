@@ -79,15 +79,15 @@ def same_bright(frame, gap):
     
     return transform
 
-def seperated_image_ratio(frame1, frame2, unit):
+def seperated_image_ratio(frame1, frame2, unit): #unit의 수만큼 이미지를 분할하여 분할된 이미지의 pixel_ratio를 array에 저장
     ratio_arr = np.zeros((unit,unit), dtype = int)
     U = int(frame1.shape[0]/unit)
     white = (255,255,255)
     black = (0,0,0)
 
     #격자 그리기
-    for x in range(unit): cv2.line(frame1, (U*x, 0), (U*x, U*unit), black, 1, 4)
-    for y in range(unit): cv2.line(frame1, (0, U*y), (U*unit, U*y), black, 1, 4)
+    for x in range(unit): cv2.line(frame2, (U*x, 0), (U*x, U*unit), black, 1, 4)
+    for y in range(unit): cv2.line(frame2, (0, U*y), (U*unit, U*y), black, 1, 4)
 
     #ratio 행렬 생성
     for i in range(unit):
@@ -98,8 +98,8 @@ def seperated_image_ratio(frame1, frame2, unit):
             ratio_arr[i,j] = ratio
 
             text = '('+str(i)+','+str(j)+')'
-            cv2.putText(frame1, text, (j*U+int(U*0.2), i*U+int(U*0.4)), 1, 0.5, black)
-            cv2.putText(frame1, str(ratio), (j*U+int(U*0.3), i*U+int(U*0.8)), 1, 0.6, black)
+            #cv2.putText(frame2, text, (j*U+int(U*0.2), i*U+int(U*0.4)), 1, 0.5, black)
+            cv2.putText(frame2, str(ratio), (j*U+int(U*0.3), i*U+int(U*0.8)), 1, 0.6, black)
             #cv2.line(frame1, (int(U*(i+0.5)), int(U*(j+0.5))), (int(U*(i+0.5)), int(U*(j+0.5))), (0,0,0), 5)
            
     return ratio_arr           
@@ -128,12 +128,37 @@ def seperated_image_xor(frame1, unit):
            
     return ratio_arr      
 
+def wetpoint_list(r_arr):
+    wet = []
+    for i in range(len(r_arr[0])):
+        for j in range(len(r_arr[1])):
+
+            R = r_arr[i,j]
+                
+            Rlst = []
+            if (1<=i<=len(r_arr[0])-2 and 1<=j<=len(r_arr[1])-2):
+                for m in range(3):
+                    for n in range(3):
+                        Rlst.append(r_arr[i-1+m,j-1+n])
+            for r in Rlst:
+                if r-R > 25:
+                    wet.append((i,j))
+                if wet != []:
+                    if wet[-1] == (i,j):
+                        break
+            
+            if wet != []:
+                if wet[-1] != (i,j):
+                    if np.mean(r_arr)-R > 50 and R!=0:
+                        wet.append((i,j))
+    return wet
+
 def pointing_wet(frame, lst, unit):
     U = int(frame.shape[0]/unit)
     for n in lst:
         cv2.line(frame, (int(U*(n[1]+0.5)), int(U*(n[0]+0.5))), (int(U*(n[1]+0.5)), int(U*(n[0]+0.5))), (0,0,0), 7)
 
-def boxing_wet(frame, lst, unit):
+def boxing_wet(frame, lst, unit): #
     U = int(frame.shape[0]/unit)
     thick = 2
     for n in lst:
@@ -143,31 +168,6 @@ def boxing_wet(frame, lst, unit):
         cv2.line(frame, (U*x, U*y), (U*(x+1), U*y), (0,0,255), thick, 4)
         cv2.line(frame, (U*(x+1), U*y), (U*(x+1), U*(y+1)), (0,0,255), thick, 4)
         cv2.line(frame, (U*x, U*(y+1)), (U*(x+1), U*(y+1)), (0,0,255), thick, 4)
-        
-
-    
-def wetpoint_list(r_arr):
-    wet = []
-    for i in range(len(r_arr[0])):
-        for j in range(len(r_arr[1])):
-
-            R = r_arr[i,j]
-                
-            Rlst = []
-            if (1<=i<=4 and 1<=j<=4):
-                for m in range(3):
-                    for n in range(3):
-                        Rlst.append(r_arr[i-1+m,j-1+n])
-            for r in Rlst:
-                if r-R > 60:
-                    wet.append((i,j))
-            
-            if R<30:
-                wet.append((i,j))
-        
-    return wet
-
-
 
 cap1 = cv2.VideoCapture(0) # 외장형 USB 웹캠1 (위쪽이 0번)-R
 cap2 = cv2.VideoCapture(1) # 외장형 USB 웹캠2 (아래쪽이 1번)-L
@@ -184,7 +184,7 @@ cv2.setTrackbarPos('Y', 'Binary', 200) #초기값 200
 #sys.stdout = open('output.txt','w') #print 값 output.txt파일로 저장
 
 count = 0
-
+unit = 15
 while True:
     ret1, f1 = cap1.read()
     ret2, f2 = cap2.read()
@@ -194,8 +194,6 @@ while True:
     y = cv2.getTrackbarPos('Y','Binary') # frame2의 y축 값 변경
 
     if (ret1 and ret2):
-
-       
 
         frame1_rgb = im_trim(f1, 72, 100, 300, 300)
         frame2_rgb = im_trim(f2, x, y, 300, 300) # x 초기값 40, y 초기값 200
@@ -208,7 +206,7 @@ while True:
         gap = average1 - average2
 
         frame2_c = same_bright(frame2, gap)
-            
+        
         average2_c = pixel_value_average(frame2_c)
 
         thresh1 = Filter(frame1, TH)
@@ -216,22 +214,22 @@ while True:
 
         thresh3 = cv2.bitwise_xor(thresh1, thresh2) # t1, t2 이미지 겹치는 부분 0으로 변환
         xor_ratio = count_pixel(thresh3) * 100/ thresh3.size
-        xor_ratio_arr = seperated_image_xor(thresh3, 10)
+        #xor_ratio_arr = seperated_image_xor(thresh3, 10)
 
-        p_ratio = int(pixel_ratio(thresh1, thresh2)) # t1, t2의 검은색 픽셀 수 비율 계산
+        r_arr = seperated_image_ratio(thresh1, thresh2, unit)  #pixel이 300*300 이므로 unit은 300의 약수여야함
+        p_ratio = int(np.mean(r_arr))
 
-        r_arr = seperated_image_ratio(thresh1, thresh2, 10)  #pixel이 300*300 이므로 unit은 300의 약수여야함
         wet = wetpoint_list(r_arr)
+        boxing_wet(frame1_rgb, wet, unit)
 
-        boxing_wet(frame1_rgb, wet, 10)
-
-        if (p_ratio<85 and p_ratio>0):
+        if len(wet) > 20:
             count += 1
         else:
             count = 0
 
         if count > 6:
             print('',\
+            'W.P '+str(len(wet)),\
             'R: '+ str(p_ratio),\
             'TH: ' + str(TH),\
             'GAP: ' + str(int(gap)),\
@@ -246,6 +244,7 @@ while True:
 
         else:
             print('',\
+            'W.P '+str(len(wet)),\
             'R: '+ str(p_ratio),\
             'TH: ' + str(TH),\
             'GAP: ' + str(int(gap)),\
@@ -257,11 +256,9 @@ while True:
 
         cv2.imshow("1", thresh1)
         cv2.imshow("2", thresh2)
-        cv2.imshow("3", thresh3)
+        #cv2.imshow("3", thresh3)
         cv2.imshow("ORIGIN1", frame1_rgb)
         #cv2.imshow("ORIGIN2", frame2_c)
-        #cv2.imshow("O", f1)
-        #cv2.imshow("O,", f2)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

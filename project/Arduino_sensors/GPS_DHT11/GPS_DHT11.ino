@@ -12,6 +12,10 @@ unsigned long ALARM_TIME;
 
 unsigned long GPS_LAST, BT_TIME;
 
+
+String dummy_lattitude = "3733.3614";
+String dummy_longitude = "12702.7910";
+
 #include "DHT.h"
 #define DHTPIN 2  //온습도 센서 디지털 2번에 신호선 연결
 #define DHTTYPE DHT11
@@ -116,8 +120,14 @@ void loop() {
     // 라즈베리파이에 정보 송신  
   }
 
+
+
   if(SEND_FLAG == true)
   {
+    if(lattitude.length() <3)
+      lattitude = dummy_lattitude;
+    if(longitude.length() <3)
+      longitude = dummy_longitude;
     SEND_FLAG = false;
       Serial.print("A ,");
       Serial.print(lattitude); Serial.print(",");

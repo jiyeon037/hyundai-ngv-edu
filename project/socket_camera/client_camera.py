@@ -27,6 +27,13 @@ def get_img_channel(channel):
     img = cv2.imdecode(data,1)
     return img
 
+def SEND_WARN():
+    for i in range(5):
+        Message = '3'
+        client_socket.send(Message.encode()) ##알람 경보 활성화  
+        print("send")
+
+    
 
 HOST = '192.168.0.9'
 PORT = 9999

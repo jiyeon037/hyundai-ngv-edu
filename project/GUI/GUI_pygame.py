@@ -20,7 +20,7 @@ def drow_image():
 
 
 while True:
-    print("A")
+    print("A")    ##
     drow_image()
     time.sleep(1)
 

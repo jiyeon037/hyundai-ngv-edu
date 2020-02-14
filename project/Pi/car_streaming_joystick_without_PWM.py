@@ -149,8 +149,7 @@ def threaded(client_socket, addr):
                 #stringData = queue2.get()
             if ch_data == 3:                           ### WARN SIGNAL
                 GPIO.output(GPIO_SIGNAL,False)
-                A =b''
-                B =b''
+                stringData = ''
                 print("EEEE")
                 tt = millis_python()
             

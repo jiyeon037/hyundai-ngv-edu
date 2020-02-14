@@ -198,7 +198,7 @@ def get_img_channel(channel):
     img = cv2.imdecode(data,1)
     return img
 
-HOST = '192.168.43.252'
+HOST = '192.168.0.9'
 PORT = 9999
 client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 
 client_socket.connect((HOST, PORT)) 

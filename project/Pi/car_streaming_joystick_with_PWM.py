@@ -33,7 +33,7 @@ pwm.set_pwm_freq(60) # 서보모터 60Hz로 펄스주기를 설정.
 
 #### 동키카 PWM 펄스 조절 부분 #########
 # 이 부분의 값을 적절히 조절해서 전진/후진/정지/좌/우 조절할 것#
-PWM_GO   = 395
+PWM_GO   = 398
 PWM_BACK = 370
 PWM_STOP = 380
 
@@ -73,7 +73,7 @@ global CONT_DATA
 GO = 0
 TILT = 0
 tt =1
-
+last_ch_data =0
 ALARM = False
 init_time = time.time()
 
@@ -143,14 +143,22 @@ def threaded(client_socket, addr):
             ch_data = int(data)
             if ch_data == 1:
                 stringData = A
+                #client_socket.send(str(len(A)).ljust(16).encode())
+                #client_socket.send(A)
+                last_ch_data =1
                 #stringData = queue1.get()
             if ch_data == 2:
                 stringData = B
+                last_ch_data =2
+                #client_socket.send(str(len(B)).ljust(16).encode())
+                #client_socket.send(B)
                 #stringData = queue2.get()
             if ch_data == 3:                           ### WARN SIGNAL
+                
                 GPIO.output(GPIO_SIGNAL,False)
                 print("EEEE")
                 tt = millis_python()
+                stringData =''
             
             client_socket.send(str(len(stringData)).ljust(16).encode())
             client_socket.send(stringData)
@@ -187,8 +195,8 @@ def threaded(client_socket, addr):
 
 
 def webcam():
-    capture1 = cv2.VideoCapture(0) # 카메라 채널 바꿔주면 됨
-    capture2 = cv2.VideoCapture(2) # 카메라 채널 바꿔주면 됨
+#    capture1 = cv2.VideoCapture(0) # 카메라 채널 바꿔주면 됨
+#    capture2 = cv2.VideoCapture(2) # 카메라 채널 바꿔주면 됨
     while True:
         ret1, frame1 = capture1.read()
         ret2, frame2 = capture2.read()
@@ -216,12 +224,16 @@ def webcam():
             break
 
 GPIO.output(GPIO_SIGNAL,True)
-
+capture1 = cv2.VideoCapture(0) # 카메라 채널 바꿔주면 됨
+capture2 = cv2.VideoCapture(2) # 카메라 채널 바꿔주면 됨
 start_new_thread(webcam, ())
         
 while True:
     print('wait')
-    client_socket, addr = server_socket.accept() 
+    client_socket, addr = server_socket.accept()
+    
+    #threaded(client_socket, addr)
+    
     start_new_thread(threaded, (client_socket, addr )) 
 
 server_socket.close() 

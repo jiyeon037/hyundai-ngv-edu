@@ -226,7 +226,6 @@ while True:
         # Frame 중복 방지용 dummy data 전송 
         Message = '99'
         client_socket.send(Message.encode()) ##알람 경보 활성화  
-
         f1 = get_img_channel('2') # 2번 이미지 전송 요청
     
     TH = cv2.getTrackbarPos('threshold','Binary')*0.01 # threshold 필터링 값ㅂ
@@ -262,14 +261,12 @@ while True:
         wet = wet_list_filter(unit_arr, wet)
         boxing_wet(frame1_rgb, wet, unit)
        
-        if len(wet) > 3:
+        if len(wet) >= 8:
             count += 1
         else:
             count = 0
         
-        sign = 0
-        if count > 50: ## 노면이 젖은 부분을 검출하는 부
-            sign = 1
+        if count > 50: ## 노면이 젖은 부분을 검출하는 부분
 
             print('',\
             'W.P '+str(len(wet)),\

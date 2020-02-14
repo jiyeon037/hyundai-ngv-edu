@@ -164,8 +164,8 @@ def boxing_wet(frame, lst, unit): # wet list의 젖은 픽셀 좌표를 box로 �
     U = int(frame.shape[0]/unit)
     thick = 2
     for n in lst:
-        x = n[1]
-        y = n[0]
+        x = n[0]
+        y = n[1]
         cv2.line(frame, (U*x, U*y), (U*x, U*(y+1)), (0,0,255), thick, 4)
         cv2.line(frame, (U*x, U*y), (U*(x+1), U*y), (0,0,255), thick, 4)
         cv2.line(frame, (U*(x+1), U*y), (U*(x+1), U*(y+1)), (0,0,255), thick, 4)
@@ -174,13 +174,13 @@ def boxing_wet(frame, lst, unit): # wet list의 젖은 픽셀 좌표를 box로 �
 def nothing(x):
     pass #더미 함수 생성... 트랙 바 생성시 필요하므로
 
-def recvall(sock, count):
+def recvall(sock, Count):
     buf = b''
-    while count:
-        newbuf = sock.recv(count)
+    while Count:
+        newbuf = sock.recv(Count)
         if not newbuf: return None
         buf += newbuf
-        count -= len(newbuf)
+        Count -= len(newbuf)
     return buf
 
 def SEND_WARN():
@@ -188,7 +188,6 @@ def SEND_WARN():
         Message = '3'
         client_socket.send(Message.encode()) ##알람 경보 활성화  
         print("send")
-        time.sleep(1)
 
 def get_img_channel(channel):
     message = channel
@@ -199,7 +198,7 @@ def get_img_channel(channel):
     img = cv2.imdecode(data,1)
     return img
 
-HOST = '192.168.0.9'
+HOST = '192.168.43.252'
 PORT = 9999
 client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM) 
 client_socket.connect((HOST, PORT)) 
@@ -219,15 +218,15 @@ f1 =''
 f2 =''
 while True:
     if WARN_FLAG == True:
-        SEND_WARN()
+        #SEND_WARN()
         WARN_FLAG = False
+        
+        
     else:
-        f2 = get_img_channel('1') # 1번 이미지 전송 요청
+        f1 = get_img_channel('1') # 1번 이미지 전송 요청
         # Frame 중복 방지용 dummy data 전송 
-        Message = '99'
-        client_socket.send(Message.encode()) ##알람 경보 활성화  
-
-        f1 = get_img_channel('2') # 2번 이미지 전송 요청
+        
+        f2 = get_img_channel('2') # 2번 이미지 전송 요청
     
     TH = cv2.getTrackbarPos('threshold','Binary')*0.01 # threshold 필터링 값ㅂ
     x = cv2.getTrackbarPos('X','Binary') # frame2의 x축 값 변경
@@ -314,3 +313,6 @@ while True:
 cv2.destroyAllWindows() # 리소스 반환
 cv2.waitKey(0)
 client_socket.close() 
+
+
+## 준세요

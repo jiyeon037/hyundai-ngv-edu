@@ -212,8 +212,8 @@ while True:
     x = cv2.getTrackbarPos('X','Binary') # frame2의 x축 값 변경
     y = cv2.getTrackbarPos('Y','Binary') # frame2의 y축 값 변경
 
-    f1 = get_img_channel('1') # 1번 이미지 전송 요청
-    f2 = get_img_channel('2') # 2번 이미지 전송 요청
+    f2 = get_img_channel('1') # 1번 이미지 전송 요청
+    f1 = get_img_channel('2') # 2번 이미지 전송 요청
 
     if True:
 
@@ -252,7 +252,7 @@ while True:
         sign = 0
         if count > 50:
             sign = 1
-            
+
             print('',\
             'W.P '+str(len(wet)),\
             'R: '+ str(p_ratio),\
@@ -289,8 +289,6 @@ while True:
         break
     # 사용자가 키보드 q 누르면 Opencv 종료
 
-cap1.release()
-cap2.release()
 cv2.destroyAllWindows() # 리소스 반환
 cv2.waitKey(0)
 client_socket.close() 

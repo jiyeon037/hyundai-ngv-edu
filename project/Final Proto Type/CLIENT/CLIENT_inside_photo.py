@@ -7,13 +7,17 @@ import math
 import time
 import sys
 import socket
+import requests
 
-HOST = '192.168.0.9'
+
+#HOST = '192.168.0.9'
+HOST = '172.20.10.3'
+
 PORT = 9999
-#url_data = 'http://ec2-18-217-158-122.us-east-2.compute.amazonaws.com:5000/data'
-#url_image = 'http://ec2-18-217-158-122.us-east-2.compute.amazonaws.com:5000/image'
-url_data = 'http://127.0.0.1:5000/data'
-url_image = 'http://127.0.0.1:5000/image'
+url_data = 'http://ec2-18-217-158-122.us-east-2.compute.amazonaws.com:5000/data'
+url_image = 'http://ec2-18-217-158-122.us-east-2.compute.amazonaws.com:5000/image'
+#url_data = 'http://127.0.0.1:5000/data'
+#url_image = 'http://127.0.0.1:5000/image'
 
 
 ### 실내 ###
@@ -284,8 +288,8 @@ while True:
             print("SEND PHOTO to Server")
             SERVER_SEND_FLAG = True
             files = {'file': open(fileposition, 'rb')}
-            #requests.post(url_image, files=files)
-            #print("post : ", requests.post(url_image, files=files))
+            res = requests.post(url_image, files=files)
+            print("post : ", res)
         
         img_number+=1
         WARN_FLAG = False

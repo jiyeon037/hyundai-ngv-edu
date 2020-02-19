@@ -14,8 +14,8 @@ import requests
 HOST = '172.20.10.3'
 
 PORT = 9999
-url_data = 'http://ec2-18-217-158-122.us-east-2.compute.amazonaws.com:5000/data'
-url_image = 'http://ec2-18-217-158-122.us-east-2.compute.amazonaws.com:5000/image'
+url_data = ''
+url_image = ''
 #url_data = 'http://127.0.0.1:5000/data'
 #url_image = 'http://127.0.0.1:5000/image'
 

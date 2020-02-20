@@ -230,7 +230,7 @@ while True:
     if WARN_FLAG == True:
         SEND_WARN()
         WARN_FLAG = False
-        
+    print(time.time())        
     f1 = get_img_channel('1') # 1번 이미지 전송 요청
     f2 = get_img_channel('2') # 2번 이미지 전송 요청
     

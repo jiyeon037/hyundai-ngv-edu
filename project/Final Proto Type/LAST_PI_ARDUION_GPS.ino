@@ -14,8 +14,7 @@
  * 주변 자동차에서 발생하는 경고 신호 수신해 라즈베리파이에 경고 신호 수신 내용 전달 
  * 
  */
-#include <SoftwareSerial.h>
-SoftwareSerial GPS(7,6);
+
 #include<SPI.h>
 
 #define OBJECT  0xA0      // 대상 온도 커맨드
@@ -59,14 +58,15 @@ int SPI_COMMAND(unsigned char cCMD) // 적외선 온도 센서에 온도 정보 
     T_high_byte = SPI.transfer(0x22);  
     delayMicroseconds(10);             
     digitalWrite(chipSelectPin , HIGH);  
-    return (T_high_byte<<8 | T_low_byte);  // 온도값 return 
+    return (T_high_byte<<8 | T_low_byte);  // 온도값 return */
+    
 }
 
 
 void setup() {
   
   // put your setup code here, to run once:
-  GPS.begin(9600);
+  Serial2.begin(9600);
   Serial.begin(9600);
   Serial3.begin(9600);
   digitalWrite(chipSelectPin , HIGH);    
@@ -89,7 +89,7 @@ void loop()
   else if(BT_FLAG == true && millis() - BT_TIME > 100)
   {
     BT_FLAG = false;
-    Serial.println(BT_DATA.length());
+    //Serial.println(BT_DATA.length());
     if(BT_DATA.indexOf('B') != -1)
     {
       Serial.println("hello");
@@ -122,14 +122,14 @@ void loop()
     SEND_FLAG = true;
   }
   //////////////////////////////////////////////////////////////////////////////////
-  if(GPS.available() && !Serial3.available() && !Serial.available())
+  if(Serial2.available() && !Serial3.available() && !Serial.available())
   {
     char data;
-    data = GPS.read();
+    data = (char)Serial2.read();
     GPS_DATA += data;
     GPS_LAST = millis();
   }
-  if(!GPS.available() && millis() - GPS_LAST > 100)
+  if(millis() - GPS_LAST > 100)
   {
     //Serial.print(GPS_DATA);
     int data_start = GPS_DATA.indexOf("GPRMC");
@@ -157,7 +157,7 @@ void loop()
     iOBJECT = SPI_COMMAND(OBJECT);      // 대상 온도 Read 
     road_temp = float(iOBJECT)/100,2;
     // 이 부분에 적외선 온도 센서 끝
-    
+    //Serial.print("ROAD :"); Serial.println(road_temp);
     // 라즈베리파이에 정보 송신  
   }
   

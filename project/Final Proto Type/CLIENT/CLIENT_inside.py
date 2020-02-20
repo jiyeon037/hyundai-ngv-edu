@@ -18,9 +18,9 @@ url_image = 'http://127.0.0.1:5000/image'
 
 ### 실내 ###
 TH_init = 125
-box_number = 20
-count_val = 20
-unit = 20 # pixel이 400*400 이므로 unit은 400의 약수여야함
+box_number = 30
+count_val = 3
+unit = 80 # pixel이 400*400 이므로 unit은 400의 약수여야함
 
 ### 실외 ###
 #TH_init = 
@@ -283,7 +283,7 @@ while True:
         
             print("SEND PHOTO to Server")
             SERVER_SEND_FLAG = True
-            files = {'file': open(fileposition, 'rb')}
+            #files = {'file': open(fileposition, 'rb')}
             #requests.post(url_image, files=files)
             #print("post : ", requests.post(url_image, files=files))
         

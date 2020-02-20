@@ -7,13 +7,22 @@
 # 
 # https://www.gpsinformation.org/dale/nmea.htm
 # GPS 프로토콜 : DMM ( 도 및 십진수 분 )
+
+
+url_data = 'http://ec2-18-217-158-122.us-east-2.compute.amazonaws.com:5000/data'
+url_image = 'http://ec2-18-217-158-122.us-east-2.compute.amazonaws.com:5000/image'
+#url_data = 'http://127.0.0.1:5000/data'
+#url_image = 'http://127.0.0.1:5000/image'
+
+
 import serial
 from serial.tools import list_ports
 
 # GUI 표현해주는 내용
 import pygame
 import time
-
+import os
+import datetime
 # 서버쪽에 데이터 전
 import requests
 
@@ -28,8 +37,9 @@ window = pygame.display.set_mode((1000, 656))
 window.fill((255, 255, 255))
 pygame.display.update()
 
-LAT= ''
-LONG=''
+ #37.5575 127.033456
+LAT= '37.5575'
+LONG='127.033456'
 H=''
 T=''
 ALARM = ''
@@ -98,8 +108,10 @@ while True:
             print("SEND TO SERVER")
             message = 'B'
             ser.write(message.encode())
-            #params = {'req_lat': LAT, 'req_lng': LONG, 'req_t1' : ROAD_TEMP, 'req_t2' : T, 'req_h' : H}
-            #response = requests.get(http://ec2-18-222-54-71.us-east-2.compute.amazonaws.com:5000/data, params=params)
+            now = datetime.datetime.now()
+            params = {'req_lat': LAT, 'req_lng': LONG, 'req_t1' : T, 'req_t2' : ROAD_TEMP, 'req_h' : H, 'req_date' : now.strftime('%Y-%m-%d'), 'req_time' : now.strftime('%H:%M:%S')}
+            response = requests.get(url_data, params=params)
+            response = requests.get(http://ec2-18-222-54-71.us-east-2.compute.amazonaws.com:5000/data, params=params)
            
         
     else:
@@ -114,3 +126,6 @@ while True:
 GPIO.cleanup()
 pygame.quit()
 quit()
+
+
+#20200219 5:45PM 

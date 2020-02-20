@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 import cv2
 import numpy as np
@@ -9,32 +7,35 @@ import sys
 import socket
 
 HOST = '192.168.0.9'
+#HOST = '192.168.43.252' # wifi3
 PORT = 9999
-#url_data = 'http://ec2-18-217-158-122.us-east-2.compute.amazonaws.com:5000/data'
-#url_image = 'http://ec2-18-217-158-122.us-east-2.compute.amazonaws.com:5000/image'
-url_data = 'http://127.0.0.1:5000/data'
-url_image = 'http://127.0.0.1:5000/image'
-
 
 ### 실내 ###
+<<<<<<< HEAD
 TH_init = 125
 box_number = 30
 count_val = 3
 unit = 80 # pixel이 400*400 이므로 unit은 400의 약수여야함
+=======
+>>>>>>> b208b0830797f153b42c01cbe5f88efb8fad306d
 
+TH_init = 125
+box_number = 30
+count_val = 2
+unit = 80 # pixel이 400*400 이므로 unit은 400의 약수여야함
+'''
 ### 실외 ###
-#TH_init = 
-#box_number = 
-#count_val = 
-#unit = 
-
+TH_init = 75
+box_number = 8
+count_val = 2
+unit = 20
+'''
 WARN_FLAG = False
 thisDirectory = os.path.dirname(os.path.realpath(__file__))
 count = 0
-img_number = 0
+img_number = 10000
 f1 =''
 f2 =''
-SERVER_SEND_FLAG = False
 
 '''
 1. 웹캠 이미지 리드
@@ -273,6 +274,7 @@ while True:
         
         SEND_WARN()
         cv2.imwrite(thisDirectory + '\wetroad\\' + str(img_number) + '.jpg', frame2_rgb)
+<<<<<<< HEAD
         fileposition = thisDirectory + '\wetroad\\' + str(img_number) + '.jpg'
         #print(fileposition)
         
@@ -287,6 +289,8 @@ while True:
             #requests.post(url_image, files=files)
             #print("post : ", requests.post(url_image, files=files))
         
+=======
+>>>>>>> b208b0830797f153b42c01cbe5f88efb8fad306d
         img_number+=1
         WARN_FLAG = False
         
@@ -340,15 +344,11 @@ while True:
             '',\
             sep = ' | ')
             wet = []
-            count = 41
+            count = count_val + 1
             WARN_FLAG = True
             
-
-            
-        else: #안전한 경우 
-            SERVER_SEND_FLAG = False
+        else:
             SEND_SAFE()
-            WARN_FLAG = False
             print('',\
             'W.P '+str(wet_arr.sum()),\
             #'R: '+ str(p_ratio),\
@@ -360,15 +360,15 @@ while True:
             '',\
             sep = ' | ')
 
-        frame2_rgb = im_resize(frame2_rgb, 1)
+        frame2_rgb = im_resize(frame2_rgb, 1.5)
 
         #cv2.imshow("1", thresh1)
         #cv2.imshow("2", thresh2)
         
-        cv2.imshow("3", thresh3)
+        #cv2.imshow("3", thresh3)
         #cv2.imshow("ORIGIN1", rotate1)
         #cv2.imshow("ORIGIN2", rotate2)
-        cv2.imshow("0", frame1_rgb)
+        #cv2.imshow("0", frame1_rgb)
 
         cv2.imshow("DETECTING", frame2_rgb)
 
